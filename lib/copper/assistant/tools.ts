@@ -10,6 +10,7 @@ import {
   type Plan,
   type ProductId,
 } from "@/lib/copper/catalog";
+import { DOCUMENT_IDS, readDocument } from "@/lib/copper/document-pages";
 import { readInventory } from "@/lib/copper/inventory";
 
 export type ProductList = {
@@ -200,5 +201,11 @@ export const copperTools = {
       "Checks today's stock for a Copper product, for every color or just one.",
     inputSchema: checkAvailabilityInput,
     execute: async (input) => checkAvailability(input),
+  }),
+  read_document: tool({
+    description:
+      "Reads one Copper support document, page by page, with each page's number. Use it for setup, features, error codes, troubleshooting, warranty, returns, refunds, privacy and Copper Plus questions.",
+    inputSchema: z.object({ document: z.enum(DOCUMENT_IDS) }),
+    execute: async ({ document }) => readDocument(document),
   }),
 };

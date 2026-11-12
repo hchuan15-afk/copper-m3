@@ -96,3 +96,18 @@ each step. Module 3 teaches it to answer from the customer documents.
 | Instructions | `lib/copper/assistant/instructions.ts` | `COPPER_INSTRUCTIONS`. Copper says it can't help yet with warranty, setup, troubleshooting or privacy |
 | Data | `lib/copper/inventory.ts`, `lib/copper/documents.ts` | Stock from `lib/copper/data/inventory.json`; `DOCUMENTS`: the four customer documents and their PDF paths under `public/docs/`. The PDFs are added in class |
 | AI calls | `{ module: 2, feature: "ask-copper" }` | One streamed call per question |
+
+## Module 3: Ask Copper answers from the support documents
+
+**Summary:** Ask Copper can now read the four customer PDFs and answers
+support questions only from them, ending each answer with
+`Source: <document>, page <n>`. If the documents don't cover a question, it
+says it couldn't find that in the support documents.
+
+| Piece | Where | What it does |
+|---|---|---|
+| PDFs | `public/docs/*.pdf` | The four customer documents, served at the paths in `lib/copper/documents.ts` |
+| Page text | `lib/copper/data/document-pages.json` | The text of each PDF, one string per page (page 1 first) |
+| Reader | `lib/copper/document-pages.ts` | `readDocument(id)`: every page of one document with its page number and a `#page=N` link to the PDF |
+| Tool | `read_document` in `lib/copper/assistant/tools.ts` | Lets the model read one document by id |
+| Instructions | `lib/copper/assistant/instructions.ts` | Which document covers what, how to cite the page, and what to say when nothing matches |

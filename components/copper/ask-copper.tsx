@@ -148,7 +148,7 @@ export function AskCopper({ aiConfigured }: { aiConfigured: boolean }) {
                   Ask Copper
                 </SheetTitle>
                 <SheetDescription className="text-xs text-white/70">
-                  Prices, totals and stock, checked with tools.
+                  Prices, stock and support answers, with sources.
                 </SheetDescription>
               </div>
               <SheetClose asChild>
@@ -225,7 +225,7 @@ export function AskCopper({ aiConfigured }: { aiConfigured: boolean }) {
                   aria-label="Your question"
                   value={draft}
                   onChange={(event) => setDraft(event.target.value)}
-                  placeholder="Ask about prices or stock…"
+                  placeholder="Ask about prices, stock or support…"
                   className="bg-background focus-visible:ring-ring h-10 flex-1 rounded-full border px-4 text-sm outline-none focus-visible:ring-2"
                 />
                 <Button
@@ -605,6 +605,25 @@ function ToolOutput({ name, output }: { name: string; output: any }) {
       </div>
     );
   }
+  if (name === "read_document" && output?.status === "ok")
+    return (
+      <div className="space-y-1 text-xs">
+        <p className="font-medium">{output.document}</p>
+        <div className="flex flex-wrap gap-1">
+          {output.pages.map((p: any) => (
+            <a
+              key={p.page}
+              href={p.link}
+              target="_blank"
+              rel="noreferrer"
+              className="bg-accent/15 rounded-full px-2 py-0.5 hover:underline"
+            >
+              p. {p.page}
+            </a>
+          ))}
+        </div>
+      </div>
+    );
   // A tool without its own layout yet: show what came back as plain text.
   return (
     <pre className="max-h-48 overflow-auto text-xs whitespace-pre-wrap">
